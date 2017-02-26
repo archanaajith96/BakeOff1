@@ -1,12 +1,3 @@
-
-//Hover Demo
-//Changes:
-
-//Function draw rectangle (new parameter added, boolean to signify whether an outline should be drawn)
-//new function added --> overRectangle() (void) found at the end of code
-//draw function modified
-//Cmd F "CHANGE" to find all changes
-
 import java.awt.AWTException;
 import java.awt.Rectangle;
 import java.awt.Robot;
@@ -25,8 +16,7 @@ int startTime = 0; // time starts when the first click is captured
 int finishTime = 0; //records the time of the final click
 int hits = 0; //number of successful clicks
 int misses = 0; //number of missed clicks
-int borderOn = -1;
-Robot robot; //initalized in setup 
+Robot robot; //initalized in setup
 
 int numRepeats = 1; //sets the number of times each button repeats in the test
 
@@ -43,7 +33,7 @@ void setup()
 
   try {
     robot = new Robot(); //create a "Java Robot" class that can move the system cursor
-  } 
+  }
   catch (AWTException e) {
     e.printStackTrace();
   }
@@ -57,7 +47,7 @@ void setup()
 
   Collections.shuffle(trials); // randomize the order of the buttons
   System.out.println("trial order: " + trials);
-  
+
   frame.setLocation(0,0); // put window in top left corner of screen (doesn't always work)
 }
 
@@ -72,7 +62,7 @@ void draw()
     float penalty = constrain(((95f-((float)hits*100f/(float)(hits+misses)))*.2f),0,100);
     fill(255); //set fill color to white
     //write to screen (not console)
-    text("Finished!", width / 2, height / 2); 
+    text("Finished!", width / 2, height / 2);
     text("Hits: " + hits, width / 2, height / 2 + 20);
     text("Misses: " + misses, width / 2, height / 2 + 40);
     text("Accuracy: " + (float)hits*100f/(float)(hits+misses) +"%", width / 2, height / 2 + 60);
@@ -84,52 +74,11 @@ void draw()
 
   fill(255); //set fill color to white
   text((trialNum + 1) + " of " + trials.size(), 40, 20); //display what trial the user is on
-  for (int i = 0; i < 16; i++) {// for all button
-    drawButton(i, false); // CHANGED! --> added false parameter
-  
-  }
-  
-  //CHANGED//
-  int y = overRectangle();
-  if (y != -1) 
-      drawButton(y, true);//draw button
-      
-  //END CHANGE//
-  
-  Rectangle bounds = getButtonLocation(trials.get(trialNum));
-  if (trialNum >  0){
-      Rectangle bounds1 = getButtonLocation(trials.get(trialNum-1));
-      stroke(#0000FF);
-      int x2 = bounds.x + (bounds.width/2);
-      int y2 = bounds.y + (bounds.height/2);
-      int x1 = bounds1.x + (bounds1.width/2);
-      int y1 = bounds1.y + (bounds1.height/2);
-      line(x2, y2, mouseX, mouseY);
-  }
-  
-    // Change the color to RED with high translucency.
-  fill(255, 0, 0, 130);
-  
-  // Get bounds for the target square.
-  
-  // Get the center x,y coords for the target square.
-  int centerX = bounds.x + (buttonSize / 2);
-  int centerY = bounds.y + (buttonSize / 2);
-  
-  // Calculate the x and y distance between the mouse and the target.
-  int distX = abs(centerX - mouseX);
-  int distY = abs(centerY - mouseY);
-  
-  // The size of the red dot will be proportional to the distance, but less than maxBallSize.
-  int maxBallSize  = 100;
-  int distBallSize = (int) sqrt(sq(distX) + sq(distY));
-  int ballSize     = min(maxBallSize, distBallSize);
-  
-  // Draw the red dot.
+
+  for (int i = 0; i < 16; i++)// for all button
+    drawButton(i); //draw button
+
   fill(255, 0, 0, 200); // set fill color to translucent red
-  noStroke();
-  ellipse(mouseX, mouseY, ballSize, ballSize);
-  
   //ellipse(mouseX, mouseY, 20, 20); //draw user cursor as a circle with a diameter of 20
 }
 
@@ -150,12 +99,12 @@ void mousePressed() // test to see if hit was in target!
 
   Rectangle bounds = getButtonLocation(trials.get(trialNum));
 
- //check to see if mouse cursor is inside button 
+ //check to see if mouse cursor is inside button
   if ((mouseX > bounds.x && mouseX < bounds.x + bounds.width) && (mouseY > bounds.y && mouseY < bounds.y + bounds.height)) // test to see if hit was within bounds
   {
     System.out.println("HIT! " + trialNum + " " + (millis() - startTime)); // success
-    hits++; 
-  } 
+    hits++;
+  }
   else
   {
     System.out.println("MISSED! " + trialNum + " " + (millis() - startTime)); // fail
@@ -165,8 +114,9 @@ void mousePressed() // test to see if hit was in target!
   trialNum++; //Increment trial number
 
   //in this example code, we move the mouse back to the middle
+  //CHANGED
   //robot.mouseMove(width/2, (height)/2); //on click, move cursor to roughly center of window!
-}  
+}
 
 //probably shouldn't have to edit this method
 Rectangle getButtonLocation(int i) //for a given button ID, what is its location and size
@@ -177,37 +127,37 @@ Rectangle getButtonLocation(int i) //for a given button ID, what is its location
 }
 
 //you can edit this method to change how buttons appear
-
-//CHANGED --> notice new parameter boolean stroke 
-void drawButton(int i, boolean stroke)
+void drawButton(int i)
 {
+  if (trialNum>0){
+    Rectangle prevBounds = getButtonLocation(trials.get(trialNum-1));
+    strokeWeight(2);
+    stroke(#2F4F4F);
+    line(prevBounds.x, prevBounds.y, prevBounds.x+6, prevBounds.y);
+    line(prevBounds.x, prevBounds.y, prevBounds.x, prevBounds.y+6);
+    line(prevBounds.x+prevBounds.width, prevBounds.y, prevBounds.x+prevBounds.width-6, prevBounds.y);
+    line(prevBounds.x+prevBounds.width, prevBounds.y, prevBounds.x+prevBounds.width, prevBounds.y+6);
+    line(prevBounds.x, prevBounds.y+prevBounds.height, prevBounds.x+6, prevBounds.y+prevBounds.height);
+    line(prevBounds.x, prevBounds.y+prevBounds.height, prevBounds.x, prevBounds.y+prevBounds.height-6);
+    line(prevBounds.x+prevBounds.width, prevBounds.y+prevBounds.height, prevBounds.x+prevBounds.width-6, prevBounds.y+prevBounds.height);
+    line(prevBounds.x+prevBounds.width, prevBounds.y+prevBounds.height, prevBounds.x+prevBounds.width, prevBounds.y+prevBounds.height-6);  
+  }
   Rectangle bounds = getButtonLocation(i);
-
-  if (trials.get(trialNum) == i) { // see if current button is the target
+  //noStroke();
+  if (trials.get(trialNum) == i){ // see if current button is the target
+    strokeWeight(5);
+    stroke(#FF0000);
     fill(0, 255, 255); // if so, fill cyan
   }
-  else
+  else{
+    noStroke();
     fill(200); // if not, fill gray
-  
-  if (trials.get(trialNum) == i) {
-    strokeWeight(5);
-    stroke(255, 0, 0);
-    rect(bounds.x, bounds.y, bounds.width, bounds.height); //draw button
   }
-  if (stroke) {
-    strokeWeight(5);
-    stroke(204, 102, 0);
-    rect(bounds.x, bounds.y, bounds.width, bounds.height); //draw button
-  }
-  else {
-      noStroke();
-      rect(bounds.x, bounds.y, bounds.width, bounds.height); //draw button
-  }
+  rect(bounds.x, bounds.y, bounds.width, bounds.height); //draw button
 }
 
 void mouseMoved()
 {
-    
    //can do stuff everytime the mouse is moved (i.e., not clicked)
    //https://processing.org/reference/mouseMoved_.html
 }
@@ -218,21 +168,9 @@ void mouseDragged()
   //https://processing.org/reference/mouseDragged_.html
 }
 
-void keyPressed() 
+void keyPressed()
 {
   //can use the keyboard if you wish
   //https://processing.org/reference/keyTyped_.html
   //https://processing.org/reference/keyCode.html
-}
-
-//CHANGED --> recognizes if mouseX and mouseY are over any rectangle
-int overRectangle() 
-{
-   for (int i = 0; i < 16; i++) {// for all button
-     Rectangle bounds = getButtonLocation(i);
-     if ((mouseX > bounds.x && mouseX < bounds.x + bounds.width) && (mouseY > bounds.y && mouseY < bounds.y + bounds.height)) {
-       return i;
-     }
-  }
-  return -1;
 }

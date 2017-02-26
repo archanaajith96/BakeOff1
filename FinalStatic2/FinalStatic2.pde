@@ -21,7 +21,7 @@ import processing.core.PApplet;
  * Add global variables to control red dot movement.
  */
 // Velocity of the red dot.
-int velocity = 6;
+int velocity = 7;
 // Whether the red dot is currently racing with the user.
 boolean isCompeting = false;
 // x,y velocity && x,y position for the red dot.
@@ -108,8 +108,8 @@ void draw()
   if (y != -1) drawButton(y, true);//draw button
 
   // Draw Line between two target squares.
-  strokeWeight(3);
-  stroke(180);
+  strokeWeight(9);
+  stroke(0,0,255);
   line(prevCenterX, prevCenterY, currCenterX, currCenterY);
 
       // draw a triangle at (x2, y2)
@@ -124,8 +124,8 @@ void draw()
   // Draw moving red dot guiding to the next target.
   if (isCompeting) {
     noStroke();
-    fill(255,0,0,150);
-    ellipse(dotX, dotY, 20, 20);
+    fill(255,0,0,200);
+    ellipse(dotX, dotY, 35, 35);
     dotX += dx;
     dotY += dy;
     if      (distX > 0 && dotX >= currCenterX) isCompeting = false;
@@ -230,19 +230,19 @@ void drawButton(int i, boolean stroke)
   Rectangle bounds = getButtonLocation(i);
 
   if (trials.get(trialNum) == i) { // see if current button is the target
-    fill(0, 255, 255); // if so, fill cyan
+    fill(255, 255, 0); // if so, fill cyan
   }
   else
     fill(200); // if not, fill gray
   
   if (trials.get(trialNum) == i) {
-    strokeWeight(5);
+    strokeWeight(7);
     stroke(255, 0, 0);
     rect(bounds.x, bounds.y, bounds.width, bounds.height); //draw button
   }
   if (stroke) {
-    strokeWeight(4);
-    stroke(204, 102, 0);
+    strokeWeight(7);
+    stroke(0,128,0);
     rect(bounds.x, bounds.y, bounds.width, bounds.height); //draw button
   }
   else {
