@@ -1,3 +1,12 @@
+
+//Hover Demo
+//Changes:
+
+//Function draw rectangle (new parameter added, boolean to signify whether an outline should be drawn)
+//new function added --> overRectangle() (void) found at the end of code
+//draw function modified
+//Cmd F "CHANGE" to find all changes
+
 import java.awt.AWTException;
 import java.awt.Rectangle;
 import java.awt.Robot;
@@ -76,12 +85,18 @@ void draw()
   fill(255); //set fill color to white
   text((trialNum + 1) + " of " + trials.size(), 40, 20); //display what trial the user is on
   for (int i = 0; i < 16; i++) {// for all button
-    drawButton(i, false);
+    drawButton(i, false); // CHANGED! --> added false parameter
   
   }
+  
+  //CHANGED//
   int y = overRectangle();
   if (y != -1) 
       drawButton(y, true);//draw button
+      
+  //END CHANGE//
+  
+  
   fill(255, 0, 0, 200); // set fill color to translucent red
   //ellipse(mouseX, mouseY, 20, 20); //draw user cursor as a circle with a diameter of 20
 }
@@ -118,7 +133,6 @@ void mousePressed() // test to see if hit was in target!
   trialNum++; //Increment trial number
 
   //in this example code, we move the mouse back to the middle
-  //CHANGED
   //robot.mouseMove(width/2, (height)/2); //on click, move cursor to roughly center of window!
 }  
 
@@ -131,6 +145,8 @@ Rectangle getButtonLocation(int i) //for a given button ID, what is its location
 }
 
 //you can edit this method to change how buttons appear
+
+//CHANGED --> notice new parameter boolean stroke 
 void drawButton(int i, boolean stroke)
 {
   Rectangle bounds = getButtonLocation(i);
@@ -171,6 +187,7 @@ void keyPressed()
   //https://processing.org/reference/keyCode.html
 }
 
+//CHANGED --> recognizes if mouseX and mouseY are over any rectangle
 int overRectangle() 
 {
    for (int i = 0; i < 16; i++) {// for all button
