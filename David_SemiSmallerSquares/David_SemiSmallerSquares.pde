@@ -150,7 +150,7 @@ void drawButton(int i)
   }
   else {
     // Draw Outer Square (VERY DARK GREY)
-    fill(20);
+    fill(50);
     rect(bounds.x, bounds.y, bounds.width, bounds.height);
     
     // Draw Inner Square (GREY)
