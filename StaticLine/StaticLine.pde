@@ -16,7 +16,6 @@ int startTime = 0; // time starts when the first click is captured
 int finishTime = 0; //records the time of the final click
 int hits = 0; //number of successful clicks
 int misses = 0; //number of missed clicks
-int borderOn = -1;
 Robot robot; //initalized in setup 
 
 int numRepeats = 1; //sets the number of times each button repeats in the test
@@ -77,14 +76,15 @@ void draw()
   text((trialNum + 1) + " of " + trials.size(), 40, 20); //display what trial the user is on
 
   for (int i = 0; i < 16; i++)// for all button
-    if (borderOn == i) {
-      drawButton(i, true);
-    }
-    else {
-      drawButton(i, false);
-    } //draw button
-
+    drawButton(i); //draw button
+  
   fill(255, 0, 0, 200); // set fill color to translucent red
+  Rectangle bounds = getButtonLocation(trials.get(trialNum));
+  if (trialNum >  0){
+      Rectangle bounds1 = getButtonLocation(trials.get(trialNum-1));
+      stroke(255);
+      line(bounds.x, bounds.y, bounds1.x, bounds1.y);
+  }
   //ellipse(mouseX, mouseY, 20, 20); //draw user cursor as a circle with a diameter of 20
 }
 
@@ -133,7 +133,7 @@ Rectangle getButtonLocation(int i) //for a given button ID, what is its location
 }
 
 //you can edit this method to change how buttons appear
-void drawButton(int i, boolean stroke)
+void drawButton(int i)
 {
   Rectangle bounds = getButtonLocation(i);
 
@@ -141,30 +141,12 @@ void drawButton(int i, boolean stroke)
     fill(0, 255, 255); // if so, fill cyan
   else
     fill(200); // if not, fill gray
-  if (stroke) {
-    stroke(204, 102, 0);
-  }
-  else {
-      noStroke();
-  }
+
   rect(bounds.x, bounds.y, bounds.width, bounds.height); //draw button
 }
 
 void mouseMoved()
 {
-   
-   for (int i = 0; i < 16; i++) {
-     Rectangle bounds = getButtonLocation(trials.get(i));
-     if ((mouseX > bounds.x && mouseX < bounds.x + bounds.width) && (mouseY > bounds.y && mouseY < bounds.y + bounds.height)) {
-       borderOn = i; 
-       System.out.println("hey");
-     }
-     else {
-       borderOn = -1;
-       System.out.println("not hey");
-     }
-     
-   }
    //can do stuff everytime the mouse is moved (i.e., not clicked)
    //https://processing.org/reference/mouseMoved_.html
 }

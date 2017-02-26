@@ -75,15 +75,13 @@ void draw()
 
   fill(255); //set fill color to white
   text((trialNum + 1) + " of " + trials.size(), 40, 20); //display what trial the user is on
-
-  for (int i = 0; i < 16; i++)// for all button
-    if (borderOn == i) {
-      drawButton(i, true);
-    }
-    else {
-      drawButton(i, false);
-    } //draw button
-
+  for (int i = 0; i < 16; i++) {// for all button
+    drawButton(i, false);
+  
+  }
+  int y = overRectangle();
+  if (y != -1) 
+      drawButton(y, true);//draw button
   fill(255, 0, 0, 200); // set fill color to translucent red
   //ellipse(mouseX, mouseY, 20, 20); //draw user cursor as a circle with a diameter of 20
 }
@@ -141,7 +139,10 @@ void drawButton(int i, boolean stroke)
     fill(0, 255, 255); // if so, fill cyan
   else
     fill(200); // if not, fill gray
+  
+  
   if (stroke) {
+    strokeWeight(4);
     stroke(204, 102, 0);
   }
   else {
@@ -152,19 +153,7 @@ void drawButton(int i, boolean stroke)
 
 void mouseMoved()
 {
-   
-   for (int i = 0; i < 16; i++) {
-     Rectangle bounds = getButtonLocation(trials.get(i));
-     if ((mouseX > bounds.x && mouseX < bounds.x + bounds.width) && (mouseY > bounds.y && mouseY < bounds.y + bounds.height)) {
-       borderOn = i; 
-       System.out.println("hey");
-     }
-     else {
-       borderOn = -1;
-       System.out.println("not hey");
-     }
-     
-   }
+    
    //can do stuff everytime the mouse is moved (i.e., not clicked)
    //https://processing.org/reference/mouseMoved_.html
 }
@@ -180,4 +169,15 @@ void keyPressed()
   //can use the keyboard if you wish
   //https://processing.org/reference/keyTyped_.html
   //https://processing.org/reference/keyCode.html
+}
+
+int overRectangle() 
+{
+   for (int i = 0; i < 16; i++) {// for all button
+     Rectangle bounds = getButtonLocation(i);
+     if ((mouseX > bounds.x && mouseX < bounds.x + bounds.width) && (mouseY > bounds.y && mouseY < bounds.y + bounds.height)) {
+       return i;
+     }
+  }
+  return -1;
 }
