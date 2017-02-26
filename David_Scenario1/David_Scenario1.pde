@@ -110,7 +110,16 @@ void draw()
   // Draw Line between two target squares.
   strokeWeight(3);
   stroke(180);
-  line(prevCenterX, prevCenterY, currCenterX, currCenterY); 
+  line(prevCenterX, prevCenterY, currCenterX, currCenterY);
+
+      // draw a triangle at (x2, y2)
+      pushMatrix();
+      translate(currCenterX, currCenterY);
+      float a = atan2(prevCenterX-currCenterX, currCenterY-prevCenterY);
+      rotate(a);
+      line(0, 0, -10, -10);
+      line(0, 0, 10, -10);
+      popMatrix();
   
   // Draw moving red dot guiding to the next target.
   if (isCompeting) {
