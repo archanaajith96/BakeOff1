@@ -98,9 +98,23 @@ void draw()
   
   Rectangle bounds = getButtonLocation(trials.get(trialNum));
   if (trialNum >  0){
+      
       Rectangle bounds1 = getButtonLocation(trials.get(trialNum-1));
       stroke(255);
-      line(bounds.x, bounds.y, bounds1.x, bounds1.y);
+      int x2 = bounds.x + (bounds.width/2);
+      int y2 = bounds.y + (bounds.height/2);
+      int x1 = bounds1.x + (bounds1.width/2);
+      int y1 = bounds1.y + (bounds1.height/2);
+      line(x1, y1, x2, y2);
+      // draw a triangle at (x2, y2)
+      pushMatrix();
+      translate(x2, y2);
+      float a = atan2(x1-x2, y2-y1);
+      rotate(a);
+      line(0, 0, -10, -10);
+      line(0, 0, 10, -10);
+      popMatrix();
+      
   }
   
     // Change the color to RED with high translucency.
