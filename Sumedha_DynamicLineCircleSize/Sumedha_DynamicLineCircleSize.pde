@@ -100,7 +100,11 @@ void draw()
   if (trialNum >  0){
       Rectangle bounds1 = getButtonLocation(trials.get(trialNum-1));
       stroke(255);
-      line(bounds.x, bounds.y, mouseX, mouseY);
+      int x2 = bounds.x + (bounds.width/2);
+      int y2 = bounds.y + (bounds.height/2);
+      int x1 = bounds1.x + (bounds1.width/2);
+      int y1 = bounds1.y + (bounds1.height/2);
+      line(x2, y2, mouseX, mouseY);
   }
   
     // Change the color to RED with high translucency.
