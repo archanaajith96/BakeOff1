@@ -21,7 +21,7 @@ import processing.core.PApplet;
  * Add global variables to control red dot movement.
  */
 // Velocity of the red dot.
-int velocity = 7;
+int velocity = 8;
 // Whether the red dot is currently racing with the user.
 boolean isCompeting = false;
 // x,y velocity && x,y position for the red dot.
