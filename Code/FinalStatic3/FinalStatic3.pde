@@ -31,6 +31,14 @@ float dx, dy, dotX, dotY;
 // x,y position of the previous target square.
 int distX, distY, currCenterX, currCenterY, prevCenterX, prevCenterY;
 
+// File IO. David = 1, Archana = 2, Sumedha = 3.
+// Update the userID String accordingdly.
+PrintWriter writer;
+String userID = "1";
+int mouseStartX, mouseStartY;
+float roundStartTime = 0; // For each round.
+
+
 int margin = 200; //set the margina around the squares
 final int padding = 50; // padding between buttons and also their width/height
 final int buttonSize = 40; // padding between buttons and also their width/height
@@ -42,10 +50,11 @@ int hits = 0; //number of successful clicks
 int misses = 0; //number of missed clicks
 Robot robot; //initalized in setup 
 
-int numRepeats = 3; //sets the number of times each button repeats in the test
+int numRepeats = 1; //sets the number of times each button repeats in the test
 
 void setup()
 {
+  writer = createWriter("results" + "_" + userID + ".txt");
   size(700, 700); // set the size of the window
   //noCursor(); //hides the system cursor if you want
   noStroke(); //turn off all strokes, we're just using fills here (can change this if you want)
@@ -73,6 +82,10 @@ void setup()
   System.out.println("trial order: " + trials);
   
   frame.setLocation(0,0); // put window in top left corner of screen (doesn't always work)
+  
+  // CODE MODIFICATION.
+  mouseStartX = mouseX;
+  mouseStartY = mouseY;
 }
 
 
@@ -93,6 +106,11 @@ void draw()
     text("Total time taken: " + timeTaken + " sec", width / 2, height / 2 + 80);
     text("Average time for each button: " + (timeTaken)/(float)(hits+misses) + " sec", width / 2, height / 2 + 100);
     text("Average time for each button + penalty: " + ((timeTaken)/(float)(hits+misses) + penalty) + " sec", width / 2, height / 2 + 120);
+    
+    //CODE MODIFICATION
+    writer.flush();
+    writer.close();
+    
     return; //return, nothing else to do now test is over
   }
 
@@ -165,19 +183,28 @@ void mousePressed() // test to see if hit was in target!
    * Line 162 ~ 168
    * A Hit click is accepted if the mouse was anywhere on the overlay of a square.
    */
+   
+  float roundTime = millis() - roundStartTime;
+  roundTime /= 1000;
+  
   if ((mouseX > bounds.x - (0.5 * padding) && mouseX < bounds.x + bounds.width + (0.5 * padding)) && 
       (mouseY > bounds.y - (0.5 * padding) && mouseY < bounds.y + bounds.height + (0.5 * padding)))
   {
     System.out.println("HIT! " + trialNum + " " + (millis() - startTime)); // success
+    writer.println(trialNum + "," + userID + "," + mouseStartX + "," + mouseStartY + "," + currCenterX + "," + currCenterY + "," + 40 + "," + roundTime + "," + "1");
     hits++; 
   } 
   else
   {
     System.out.println("MISSED! " + trialNum + " " + (millis() - startTime)); // fail
+    writer.println(trialNum + "," + userID + "," + mouseStartX + "," + mouseStartY + "," + currCenterX + "," + currCenterY + "," + 40 + "," + roundTime + "," + "0");
     misses++;
   }
 
   trialNum++; //Increment trial number
+  roundStartTime = millis();
+  mouseStartX = mouseX;
+  mouseStartY = mouseY;
 
   /* CODE MODIFICATION
    * Line 181 ~ 225
