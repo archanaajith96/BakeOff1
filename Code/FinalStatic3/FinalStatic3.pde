@@ -42,7 +42,7 @@ int hits = 0; //number of successful clicks
 int misses = 0; //number of missed clicks
 Robot robot; //initalized in setup 
 
-int numRepeats = 1; //sets the number of times each button repeats in the test
+int numRepeats = 3; //sets the number of times each button repeats in the test
 
 void setup()
 {
@@ -144,6 +144,7 @@ void draw()
 
 void mousePressed() // test to see if hit was in target!
 {
+  int prevTrialNum = trialNum;
   if (trialNum >= trials.size()) //if task is over, just return
     return;
 
@@ -182,7 +183,7 @@ void mousePressed() // test to see if hit was in target!
    * Line 181 ~ 225
    * Enable Competition and set up red dot's starting position and x,y velocity.
    */
-  if (trialNum > 0 && trialNum < 16) {
+  if (trialNum > 0 && trialNum < (16 * numRepeats) && (trials.get(prevTrialNum) != trials.get(trialNum))) {
     // Setting to true will enable the red dot to be drawn.
     isCompeting = true;
     
@@ -206,11 +207,15 @@ void mousePressed() // test to see if hit was in target!
     float distXY = sqrt(sq(distX) + sq(distY));
     
     // Set up the x,y velocity for the red dot.
-    if (distX == 0) {
+    if (distX == 0 && distY == 0) {
+      dx = 0;
+      dy = 0;
+    }
+    else if (distX == 0 && distY != 0) {
       dx = 0;
       dy = velocity * (distY / abs(distY));
     }
-    else if (distY == 0) {
+    else if (distY == 0 && distX != 0) {
       dx = velocity * (distX / abs(distX));
       dy = 0;
     }
